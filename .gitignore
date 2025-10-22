@@ -1,0 +1,10 @@
+# Ignorar arquivos compilados
+*.class
+
+# Ignorar diretórios de build (se usar futuramente)
+/bin/
+/build/
+/out/
+
+# Ignorar configurações locais
+.vscode/
