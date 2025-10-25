@@ -35,10 +35,10 @@ public class MenuConsole {
 					case 4 -> consultarSaldo();
 					case 5 -> exibirRelatorioDetalhado();
 					case 0 -> System.out.println("\nEncerrando sistema... Até logo!");
-					default -> System.out.println("\n❌ Opção inválida. Tente novamente.");
+					default -> System.out.println("\n Opção inválida. Tente novamente.");
 				}
 			} catch (Exception e) {
-				System.out.println("\n❌ Entrada inválida. Digite apenas números.");
+				System.out.println("\n Entrada inválida. Digite apenas números.");
 				scanner.nextLine(); // Limpa o buffer
 				opcao = -1; // Continua o loop
 			}
@@ -53,7 +53,7 @@ public class MenuConsole {
 		String nome = scanner.nextLine().trim();
 
 		if (nome.isEmpty()) {
-			System.out.println("❌ Nome não pode estar vazio.");
+			System.out.println(" Nome não pode estar vazio.");
 			return;
 		}
 
@@ -61,7 +61,7 @@ public class MenuConsole {
 		String matricula = scanner.nextLine().trim();
 
 		if (matricula.isEmpty()) {
-			System.out.println("❌ Matrícula não pode estar vazia.");
+			System.out.println(" Matrícula não pode estar vazia.");
 			return;
 		}
 
@@ -80,7 +80,7 @@ public class MenuConsole {
 		try {
 			data = dataStr.isEmpty() ? LocalDate.now() : LocalDate.parse(dataStr);
 		} catch (DateTimeParseException e) {
-			System.out.println("❌ Data inválida. Use o formato AAAA-MM-DD");
+			System.out.println("Data inválida. Use o formato AAAA-MM-DD");
 			return;
 		}
 
@@ -90,7 +90,7 @@ public class MenuConsole {
 			tipoOpcao = scanner.nextInt();
 			scanner.nextLine();
 		} catch (Exception e) {
-			System.out.println("❌ Opção inválida.");
+			System.out.println(" Opção inválida.");
 			scanner.nextLine();
 			return;
 		}
@@ -101,7 +101,7 @@ public class MenuConsole {
 		} else if (tipoOpcao == 2) {
 			tipo = TipoRegistro.COMPENSADA;
 		} else {
-			System.out.println("❌ Opção inválida. Digite 1 ou 2.");
+			System.out.println(" Opção inválida. Digite 1 ou 2.");
 			return;
 		}
 
@@ -115,7 +115,7 @@ public class MenuConsole {
 
 				RegistroController.registrarPonto(matricula, data, entrada, saida, tipo, 0);
 			} catch (DateTimeParseException e) {
-				System.out.println("❌ Horário inválido. Use o formato HH:mm (ex: 08:00)");
+				System.out.println(" Horário inválido. Use o formato HH:mm (ex: 08:00)");
 			}
 		} else {
 			try {
@@ -125,7 +125,7 @@ public class MenuConsole {
 
 				RegistroController.registrarPonto(matricula, data, null, null, tipo, horas);
 			} catch (Exception e) {
-				System.out.println("❌ Valor inválido.");
+				System.out.println(" Valor inválido.");
 				scanner.nextLine();
 			}
 		}
@@ -137,14 +137,14 @@ public class MenuConsole {
 		String matricula = scanner.nextLine().trim();
 
 		if (FuncionarioController.buscarPorMatricula(matricula) == null) {
-			System.out.println("❌ Funcionário não encontrado.");
+			System.out.println(" Funcionário não encontrado.");
 			return;
 		}
 
 		int saldoMinutos = RegistroController.consultarSaldoMinutos(matricula);
 		String saldoFormatado = RegistroController.formatarSaldo(saldoMinutos);
 
-		System.out.println("\n💰 Saldo de horas: " + saldoFormatado);
+		System.out.println("\n Saldo de horas: " + saldoFormatado);
 	}
 
 	private static void exibirRelatorioDetalhado() {
@@ -162,7 +162,7 @@ Tratamento de erros:
     scanner.nextLine();
     // ... código ...
 } catch (Exception e) {
-    System.out.println("\n❌ Entrada inválida. Digite apenas números.");
+    System.out.println("\n Entrada inválida. Digite apenas números.");
     scanner.nextLine();
     opcao = -1;
 }
@@ -171,12 +171,12 @@ Tratamento de erros:
 		catch: Se der erro, captura e não trava o programa
 		scanner.nextLine(): Limpa o que foi digitado errado
 
-		Antes: Se digitasse "abc" → programa TRAVAVA ❌
-		Agora: Se digitar "abc" → mostra erro e continua ✅
+		Antes: Se digitasse "abc" → programa TRAVAVA 
+		Agora: Se digitar "abc" → mostra erro e continua 
 
 Validações nos Cadastros:
 	if (nome.isEmpty()) {
-    System.out.println("❌ Nome não pode estar vazio.");
+    System.out.println(" Nome não pode estar vazio.");
     return;
 }
 	O que ele faz:
