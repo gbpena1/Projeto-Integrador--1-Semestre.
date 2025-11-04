@@ -1,211 +1,146 @@
 package view;
+
 import Controller.FuncionarioController;
 import Controller.RegistroController;
 import models.RegistroPonto.TipoRegistro;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
+import javax.swing.JOptionPane;
+
 public class MenuConsole {
-	static Scanner scanner = new Scanner(System.in);
+    static Scanner scanner = new Scanner(System.in);
 
-	public static void exibirMenu() {
-		int opcao;
-		do {
-			System.out.println("\n╔═══════════════════════════════════╗");
-			System.out.println("║    SISTEMA BANCO DE HORAS         ║");
-			System.out.println("╚═══════════════════════════════════╝");
-			System.out.println("1. Cadastrar Funcionário");
-			System.out.println("2. Listar Funcionários");
-			System.out.println("3. Registrar Ponto");
-			System.out.println("4. Consultar Saldo");
-			System.out.println("5. Relatório Detalhado");
-			System.out.println("0. Sair");
-			System.out.print("\nEscolha uma opção: ");
+    public void exibirMenu() {
+        String opcao;
+        String menu;
 
-			try {
-				opcao = scanner.nextInt();
-				scanner.nextLine();
+        do {
+            menu = " SISTEMA BANCO DE HORAS         ║";
+            menu += "\n1. Cadastrar Funcionário";
+            menu += "\n2. Listar Funcionários";
+            menu += "\n3. Registrar Ponto";
+            menu += "\n4. Consultar Saldo";
+            menu += "\n5. Relatório Detalhado";
+            menu += "\n0. Sair";
+            menu += "\nEscolha uma opção: ";
 
-				switch (opcao) {
-					case 1 -> cadastrarFuncionario();
-					case 2 -> FuncionarioController.listarFuncionarios();
-					case 3 -> registrarPonto();
-					case 4 -> consultarSaldo();
-					case 5 -> exibirRelatorioDetalhado();
-					case 0 -> System.out.println("\nEncerrando sistema... Até logo!");
-					default -> System.out.println("\n Opção inválida. Tente novamente.");
-				}
-			} catch (Exception e) {
-				System.out.println("\n Entrada inválida. Digite apenas números.");
-				scanner.nextLine(); // Limpa o buffer
-				opcao = -1; // Continua o loop
-			}
-		} while (opcao != 0);
+            opcao = JOptionPane.showInputDialog(null, menu, "*** Menu Principal ***", JOptionPane.QUESTION_MESSAGE);
 
-		scanner.close();
+            switch (opcao) {
+                case "1":
+                    cadastrarFuncionario();
+                    break;
+                case "2":
+                    FuncionarioController.listarFuncionarios();
+                    break;
+                case "3":
+                    registrarPonto();
+                    break;
+                case "4":
+                    consultarSaldo();
+                    break;
+                case "5":
+                    exibirRelatorioDetalhado();
+                    break;
+                case "0":
+                    JOptionPane.showMessageDialog(null, "O sistema será encerrado!", "Sair do sistema", JOptionPane.INFORMATION_MESSAGE);
+                    System.exit(0);
+                    break;
+                default:
+                    JOptionPane.showMessageDialog(null, "Opção inválida. Tente novamente.");
+                    break;
+            }
+
+        } while (!"0".equals(opcao));
     }
 
-	private static void cadastrarFuncionario() {
-		System.out.println("\n--- CADASTRAR FUNCIONÁRIO ---");
-		System.out.print("Nome: ");
-		String nome = scanner.nextLine().trim();
+    
+    private static void cadastrarFuncionario() {
+        String nome = JOptionPane.showInputDialog(null, "Digite o nome:");
+        String matricula = JOptionPane.showInputDialog(null, "Digite a matrícula:");
 
-		if (nome.isEmpty()) {
-			System.out.println(" Nome não pode estar vazio.");
-			return;
-		}
+        FuncionarioController.cadastrarFuncionario(nome, matricula);
+    }
 
-		System.out.print("Matrícula: ");
-		String matricula = scanner.nextLine().trim();
+    
+    private static void registrarPonto() {
+        String matricula = JOptionPane.showInputDialog(null, "Digite a matrícula:");
+        String dataStr = JOptionPane.showInputDialog(null, "Data (AAAA-MM-DD) ou deixe em branco para hoje:");
 
-		if (matricula.isEmpty()) {
-			System.out.println(" Matrícula não pode estar vazia.");
-			return;
-		}
+        LocalDate data;
+        try {
+            data = (dataStr == null || dataStr.trim().isEmpty()) ? LocalDate.now() : LocalDate.parse(dataStr.trim());
+        } catch (DateTimeParseException e) {
+            JOptionPane.showMessageDialog(null, "Data inválida. Use o formato AAAA-MM-DD");
+            return;
+        }
 
-		FuncionarioController.cadastrarFuncionario(nome, matricula);
-	}
+        String tipoStr = JOptionPane.showInputDialog(null, "Tipo de registro:\n1 - NORMAL\n2 - COMPENSADA");
+        int tipoOpcao;
 
-	private static void registrarPonto() {
-		System.out.println("\n--- REGISTRAR PONTO ---");
-		System.out.print("Matrícula: ");
-		String matricula = scanner.nextLine().trim();
-		// Colocando data automatica no padrão (AAAA-MM-DD)
-		System.out.print("Data (AAAA-MM-DD) ou ENTER para hoje: ");
-		String dataStr = scanner.nextLine().trim();
-		LocalDate data;
-		// Validação de data/hora
-		try {
-			data = dataStr.isEmpty() ? LocalDate.now() : LocalDate.parse(dataStr);
-		} catch (DateTimeParseException e) {
-			System.out.println("Data inválida. Use o formato AAAA-MM-DD");
-			return;
-		}
+        try {
+            tipoOpcao = Integer.parseInt(tipoStr.trim());
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Opção inválida. Digite apenas 1 ou 2.");
+            return;
+        }
 
-		System.out.print("Tipo (1-NORMAL ou 2-COMPENSADA): ");
-		int tipoOpcao;
-		try {
-			tipoOpcao = scanner.nextInt();
-			scanner.nextLine();
-		} catch (Exception e) {
-			System.out.println(" Opção inválida.");
-			scanner.nextLine();
-			return;
-		}
+        TipoRegistro tipo;
+        if (tipoOpcao == 1) {
+            tipo = TipoRegistro.NORMAL;
+        } else if (tipoOpcao == 2) {
+            tipo = TipoRegistro.COMPENSADA;
+        } else {
+            JOptionPane.showMessageDialog(null, "Opção inválida. Digite 1 ou 2.");
+            return;
+        }
 
-		TipoRegistro tipo;
-		if (tipoOpcao == 1) {
-			tipo = TipoRegistro.NORMAL;
-		} else if (tipoOpcao == 2) {
-			tipo = TipoRegistro.COMPENSADA;
-		} else {
-			System.out.println(" Opção inválida. Digite 1 ou 2.");
-			return;
-		}
+        if (tipo == TipoRegistro.NORMAL) {
+            try {
+                String entradaStr = JOptionPane.showInputDialog(null, "Hora Entrada (HH:mm):");
+                LocalTime entrada = LocalTime.parse(entradaStr.trim());
 
-		if (tipo == TipoRegistro.NORMAL) {
-			try {
-				System.out.print("Hora Entrada (HH:mm): ");
-				LocalTime entrada = LocalTime.parse(scanner.nextLine().trim());
+                String saidaStr = JOptionPane.showInputDialog(null, "Hora Saída (HH:mm):");
+                LocalTime saida = LocalTime.parse(saidaStr.trim());
 
-				System.out.print("Hora Saída (HH:mm): ");
-				LocalTime saida = LocalTime.parse(scanner.nextLine().trim());
+                RegistroController.registrarPonto(matricula, data, entrada, saida, tipo, 0);
+            } catch (DateTimeParseException e) {
+                JOptionPane.showMessageDialog(null, "Horário inválido. Use o formato HH:mm (ex: 08:00)");
+            }
+        } else {
+            try {
+                String horasStr = JOptionPane.showInputDialog(null, "Horas a compensar:");
+                int horas = Integer.parseInt(horasStr.trim());
 
-				RegistroController.registrarPonto(matricula, data, entrada, saida, tipo, 0);
-			} catch (DateTimeParseException e) {
-				System.out.println(" Horário inválido. Use o formato HH:mm (ex: 08:00)");
-			}
-		} else {
-			try {
-				System.out.print("Horas a compensar: ");
-				int horas = scanner.nextInt();
-				scanner.nextLine();
+                RegistroController.registrarPonto(matricula, data, null, null, tipo, horas);
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "Valor inválido.");
+            }
+        }
+    }
 
-				RegistroController.registrarPonto(matricula, data, null, null, tipo, horas);
-			} catch (Exception e) {
-				System.out.println(" Valor inválido.");
-				scanner.nextLine();
-			}
-		}
-	}
 
-	private static void consultarSaldo() {
-		System.out.println("\n--- CONSULTAR SALDO ---");
-		System.out.print("Matrícula: ");
-		String matricula = scanner.nextLine().trim();
+    private static void consultarSaldo() {
+        String matricula = JOptionPane.showInputDialog(null, "Digite a matrícula:");
 
-		if (FuncionarioController.buscarPorMatricula(matricula) == null) {
-			System.out.println(" Funcionário não encontrado.");
-			return;
-		}
+        if (FuncionarioController.buscarPorMatricula(matricula) == null) {
+            JOptionPane.showMessageDialog(null, "Funcionário não encontrado.");
+            return;
+        }
 
-		int saldoMinutos = RegistroController.consultarSaldoMinutos(matricula);
-		String saldoFormatado = RegistroController.formatarSaldo(saldoMinutos);
+        int saldoMinutos = RegistroController.consultarSaldoMinutos(matricula);
+        String saldoFormatado = RegistroController.formatarSaldo(saldoMinutos);
 
-		System.out.println("\n Saldo de horas: " + saldoFormatado);
-	}
+        JOptionPane.showMessageDialog(null, "Saldo de horas: " + saldoFormatado);
+    }
 
-	private static void exibirRelatorioDetalhado() {
-		System.out.println("\n--- RELATÓRIO DETALHADO ---");
-		System.out.print("Matrícula: ");
-		String matricula = scanner.nextLine().trim();
-
-		RegistroController.exibirRelatorio(matricula);
-	}
+    
+    private static void exibirRelatorioDetalhado() {
+        String matricula = JOptionPane.showInputDialog(null, "Digite a matrícula:");
+        RegistroController.exibirRelatorio(matricula);
+    }
 }
-/*
-Tratamento de erros:
-	try {
-    opcao = scanner.nextInt();
-    scanner.nextLine();
-    // ... código ...
-} catch (Exception e) {
-    System.out.println("\n Entrada inválida. Digite apenas números.");
-    scanner.nextLine();
-    opcao = -1;
-}
-	O que ele faz:
-		try: Tenta executar o código
-		catch: Se der erro, captura e não trava o programa
-		scanner.nextLine(): Limpa o que foi digitado errado
-
-		Antes: Se digitasse "abc" → programa TRAVAVA 
-		Agora: Se digitar "abc" → mostra erro e continua 
-
-Validações nos Cadastros:
-	if (nome.isEmpty()) {
-    System.out.println(" Nome não pode estar vazio.");
-    return;
-}
-	O que ele faz:
-		.trim(): Remove espaços extras
-		.isEmpty(): Verifica se está vazio
-		return: Sai do método sem fazer nada
-		Impede: o cadastro de funcionário sem nome ou matrícula
-
- Data Automatica:
-	Operador ternário: condição ? seVerdadeiro : seFalso
-		Com ele consigo atribuir uma condição de uma variavel sem usar if/else
-
-		Se digitou vazio (ENTER) → usa data de hoje (LocalDate.now())
-		Se digitou algo → converte o texto pra data (LocalDate.parse())
-
-		Antes: Tinha que digitar a data toda vez
-		Agora: Aperta ENTER = usa hoje
-
-Validação de Data/Hora
-	O que faz:
-		Se digitar data errada (ex: "99/99/9999") ele mostra erro ao invés de travar
-
-Tipo de Registro
-	if (tipoOpcao == 1) {
-    tipo = TipoRegistro.NORMAL;
-	} else if (tipoOpcao == 2) {
-    tipo = TipoRegistro.COMPENSADA;
-	}
-	O que faz
-		digita só o numero
-
- */
