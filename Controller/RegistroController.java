@@ -6,6 +6,8 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
+
 public class RegistroController {
 	public static ArrayList<RegistroPonto> registros = new ArrayList<>();
 
@@ -40,7 +42,7 @@ public class RegistroController {
 		}
 
 		registros.add(new RegistroPonto(matricula, data, entrada, saida, tipo, horasCompensadas));
-		System.out.println("Registro de ponto salvo com sucesso!");
+		JOptionPane.showMessageDialog(null, "Registro de Ponto salvo com sucesso!");
 		return true;
 	}
 
@@ -90,11 +92,11 @@ public class RegistroController {
 	public static void exibirRelatorio(String matricula) {
 		Funcionario funcionario = FuncionarioController.buscarPorMatricula(matricula);
 		if (funcionario == null) {
-			System.out.println("Funcionário não encontrado.");
+			JOptionPane.showMessageDialog(null, "Funcionário não encontrado.");
 			return;
 		}
 
-		System.out.println("\n=== RELATÓRIO DE BANCO DE HORAS ===");
+		JOptionPane.showMessageDialog(null, "Relatório Banco De Horas ");
 		System.out.println("Nome: " + funcionario.nome);
 		System.out.println("Matrícula: " + funcionario.matricula);
 		System.out.println("\nRegistros:");
