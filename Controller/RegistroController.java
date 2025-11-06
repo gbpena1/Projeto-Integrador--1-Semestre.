@@ -21,14 +21,14 @@ public class RegistroController {
 		}
 
 		// Validações para registro NORMAL
-		if (tipo == TipoRegistro.NORMAL) {
+		if (tipo == TipoRegistro.NORMAL) { 
 			if (entrada == null || saida == null) {
-				System.out.println("ERRO: Horário de entrada e saída são obrigatórios para ponto normal.");
+				JOptionPane.showMessageDialog(null, ("ERRO: Horário de entrada e saída são obrigatórios para ponto normal."));
 				return false;
 			}
 
 			if (saida.isBefore(entrada) || saida.equals(entrada)) {
-				System.out.println("ERRO: Horário de saída deve ser posterior ao horário de entrada.");
+				JOptionPane.showMessageDialog(null, "\"ERRO: Horário de saída deve ser posterior ao horário de entrada.\"");
 				return false;
 			}
 		}
@@ -36,7 +36,7 @@ public class RegistroController {
 		// Validações para registro COMPENSADO
 		if (tipo == TipoRegistro.COMPENSADA) {
 			if (horasCompensadas <= 0) {
-				System.out.println("ERRO: Horas compensadas deve ser maior que zero.");
+				JOptionPane.showMessageDialog(null,"ERRO: Horas compensadas deve ser maior que zero.");
 				return false;
 			}
 		}
@@ -97,7 +97,7 @@ public class RegistroController {
 		}
 
 		JOptionPane.showMessageDialog(null, "Relatório Banco De Horas ");
-		System.out.println("Nome: " + funcionario.nome);
+		JOptionPane.showMessageDialog(null, "Nome: " + funcionario.nome);
 		System.out.println("Matrícula: " + funcionario.matricula);
 		System.out.println("\nRegistros:");
 

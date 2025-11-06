@@ -3,7 +3,6 @@ package view;
 import Controller.FuncionarioController;
 import Controller.RegistroController;
 import models.RegistroPonto.TipoRegistro;
-
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeParseException;

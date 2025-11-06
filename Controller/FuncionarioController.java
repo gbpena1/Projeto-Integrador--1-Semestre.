@@ -2,6 +2,8 @@ package Controller;
 import models.Funcionario;
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
+
 public class FuncionarioController {
 	public static ArrayList<Funcionario> funcionarios = new ArrayList<>();
 
@@ -28,7 +30,7 @@ public class FuncionarioController {
 
 	public static void listarFuncionarios() {
 		if (funcionarios.isEmpty()) {
-			System.out.println("Nenhum funcionário cadastrado.");
+			JOptionPane.showMessageDialog(null,"Nenhum funcionário cadastrado.");
 			return;
 		}
 
