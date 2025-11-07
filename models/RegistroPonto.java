@@ -34,14 +34,6 @@ public class RegistroPonto {
 		}
 	}
 
-	public int calcularHoras() {
-		if (tipo == TipoRegistro.NORMAL) {
-			return horaSaida.getHour() - horaEntrada.getHour();
-		} else {
-			return -horasCompensadas;
-		}
-	}
-
 	public enum TipoRegistro {
 		NORMAL,
 		COMPENSADA

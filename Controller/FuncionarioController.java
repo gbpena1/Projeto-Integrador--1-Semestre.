@@ -7,17 +7,32 @@ import javax.swing.JOptionPane;
 public class FuncionarioController {
 	public static ArrayList<Funcionario> funcionarios = new ArrayList<>();
 
-	public static boolean cadastrarFuncionario(String nome, String matricula) {
-		// Verifica se já existe funcionário com essa matrícula
-		if (buscarPorMatricula(matricula) != null) {
-			System.out.println("ERRO: Já existe um funcionário cadastrado com a matrícula " + matricula);
-			return false;
-		}
+	// public static boolean cadastrarFuncionario(String nome, String matricula) {
+	// 	// Verifica se já existe funcionário com essa matrícula
+	// 	if (buscarPorMatricula(matricula) != null) {
+	// 		System.out.println("ERRO: Já existe um funcionário cadastrado com a matrícula " + matricula);
+	// 		return false;
+	// 	}
 
-		funcionarios.add(new Funcionario(nome, matricula));
-		System.out.println("Funcionário cadastrado com sucesso!");
-		return true;
-	}
+	// 	funcionarios.add(new Funcionario(nome, matricula));
+	// 	System.out.println("Funcionário cadastrado com sucesso!");
+	// 	return true;
+	// }
+	public static void cadastrarFuncionario(String nome, String matricula) {
+    if (nome == null || nome.trim().isEmpty()) {
+        JOptionPane.showMessageDialog(null, "Nome não pode ser vazio!");
+        return;
+    }
+    if (matricula == null || matricula.trim().isEmpty()) {
+        JOptionPane.showMessageDialog(null, "Matrícula não pode ser vazia!");
+        return;
+    }
+    if (buscarPorMatricula(matricula) != null) {
+    	JOptionPane.showMessageDialog(null, "Matrícula já existe!");
+   		return;
+}
+funcionarios.add(new Funcionario(nome, matricula));
+}
 
 	public static Funcionario buscarPorMatricula(String matricula) {
 		for (Funcionario f : funcionarios) {
@@ -28,32 +43,32 @@ public class FuncionarioController {
 		return null;
 	}
 
-	public static void listarFuncionarios() {
-		if (funcionarios.isEmpty()) {
-			JOptionPane.showMessageDialog(null,"Nenhum funcionário cadastrado.");
-			return;
-		}
+public static void listarFuncionarios() {
+    // 1. Verifica se a lista está vazia
+    if (funcionarios.isEmpty()) {
+        JOptionPane.showMessageDialog(null, "Nenhum funcionário cadastrado.");
+        return;
+    }
 
-		System.out.println("\n=== FUNCIONÁRIOS CADASTRADOS ===");
-		for (Funcionario f : funcionarios) {
-			System.out.println("Nome: " + f.nome + " | Matrícula: " + f.matricula);
-		}
+    // 2. Cria um construtor de String (StringBuilder)
+    StringBuilder listaFuncionarios = new StringBuilder();
+
+    // 3. Adiciona o cabeçalho
+    listaFuncionarios.append("=== FUNCIONÁRIOS CADASTRADOS ===\n\n");
+    listaFuncionarios.append("--------------------------------------------------\n");
+
+    // 4. Itera sobre a lista e adiciona cada funcionário com quebra de linha (\n)
+    for (Funcionario f : funcionarios) {
+        listaFuncionarios.append("Nome: ")
+                         .append(f.nome)
+                         .append(" | Matrícula: ")
+                         .append(f.matricula)
+                         .append("\n"); // Crucial: Quebra de linha após cada funcionário
+    }
+    
+    listaFuncionarios.append("--------------------------------------------------");
+
+    // 5. Exibe a ÚNICA janela de mensagem com a lista completa
+    JOptionPane.showMessageDialog(null, listaFuncionarios.toString());
 	}
 }
-/*boolean no retorno: Agora o método diz se deu certo (true) ou errado (false)
-Verificação de matrícula duplicada:
-
-Antes de cadastrar ele busca se já existe alguém com essa matrícula
-buscarPorMatricula(matricula) != null significa "encontrou alguém?"
-Se encontrou ele mostra erro e não cadastra
-Se não encontrou ele cadastra normalmente
-
-Mensagens mais claras: "com sucesso" vs "ERRO"
-
-
-Novo método listarFuncionarios()
-
-isEmpty(): Verifica se a lista está vazia
-for (Funcionario f : funcionarios): Percorre todos os funcionários (um por um)
-Mostra cada um: Imprime nome e matrícula de cada funcionário
-*/

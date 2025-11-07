@@ -15,8 +15,8 @@ public class RegistroController {
 		// Verifica se o funcionário existe
 		Funcionario funcionario = FuncionarioController.buscarPorMatricula(matricula);
 		if (funcionario == null) {
-			System.out.println("ERRO: Funcionário com matrícula " + matricula + " não encontrado.");
-			System.out.println("Cadastre o funcionário antes de registrar ponto.");
+			JOptionPane.showMessageDialog(null,"ERRO: Funcionário com matrícula " + matricula + " não encontrado.");
+			JOptionPane.showMessageDialog(null,"Cadastre o funcionário antes de registrar ponto.");
 			return false;
 		}
 
@@ -66,7 +66,7 @@ public class RegistroController {
 		int saldo = 0;
 		for (RegistroPonto r : registros) {
 			if (r.matricula.equals(matricula)) {
-				saldo += r.calcularHoras();
+				saldo += r.calcularMinutos();
 			}
 		}
 		return saldo;
@@ -95,82 +95,51 @@ public class RegistroController {
 			JOptionPane.showMessageDialog(null, "Funcionário não encontrado.");
 			return;
 		}
+		// 1. Inicializa o construtor de strings (StringBuilder)
+		StringBuilder relatorio = new StringBuilder();
 
-		JOptionPane.showMessageDialog(null, "Relatório Banco De Horas ");
-		JOptionPane.showMessageDialog(null, "Nome: " + funcionario.nome);
-		System.out.println("Matrícula: " + funcionario.matricula);
-		System.out.println("\nRegistros:");
+		// 2. Adiciona o cabeçalho do relatório com quebras de linha (\n)
+    	relatorio.append(" Relatório Banco De Horas\n\n");
+    	relatorio.append(" Nome: ").append(funcionario.nome).append("\n");
+    	relatorio.append(" Matrícula: ").append(funcionario.matricula).append("\n\n");
+    	relatorio.append("--------------------------------------------------\n");
+    	relatorio.append(" Registros Detalhados:\n");
+    	relatorio.append("--------------------------------------------------\n");
 
 		boolean temRegistros = false;
+
+		// 3. Itera sobre os registros e adiciona cada linha ao StringBuilder
 		for (RegistroPonto r : registros) {
 			if (r.matricula.equals(matricula)) {
 				temRegistros = true;
-				System.out.print("Data: " + r.data + " | ");
+		
+		// Inicia a linha com a data
+        relatorio.append("Data: ").append(r.data).append(" | ");
 
-				if (r.tipo == TipoRegistro.NORMAL) {
-					int minutos = r.calcularMinutos();
-					System.out.println("Entrada: " + r.horaEntrada + " | Saída: " + r.horaSaida + 
-										" | Trabalhadas: " + formatarSaldo(minutos));
-				} else {
-					System.out.println("COMPENSAÇÃO: " + r.horasCompensadas + "h abatidas");
-				}
-			}
-		}
+if (r.tipo == TipoRegistro.NORMAL) {
+                int minutos = r.calcularMinutos();
+                relatorio.append("Entrada: ").append(r.horaEntrada)
+                         .append(" | Saída: ").append(r.horaSaida)
+                         .append(" | Trabalhadas: ").append(formatarSaldo(minutos));
+            } else { // TipoRegistro.COMPENSADA
+                relatorio.append("COMPENSAÇÃO: ")
+                         .append(r.horasCompensadas).append("h abatidas");
+            }
+            // Adiciona uma quebra de linha após cada registro completo
+            relatorio.append("\n");
+        }
+    }
 
-		if (!temRegistros) {
-			System.out.println("Nenhum registro encontrado.");
-		}
+    if (!temRegistros) {
+        relatorio.append("Nenhum registro de ponto encontrado.\n");
+    }
+// 4. Adiciona o saldo total (Rodapé)
+    int saldoMinutos = consultarSaldoMinutos(matricula);
+    relatorio.append("--------------------------------------------------\n");
+    relatorio.append("--- SALDO TOTAL: ").append(formatarSaldo(saldoMinutos)).append(" ---\n");
+    relatorio.append("--------------------------------------------------");
 
-		int saldoMinutos = consultarSaldoMinutos(matricula);
-		System.out.println("\n--- SALDO TOTAL: " + formatarSaldo(saldoMinutos) + " ---");
-	}
+    // 5. Exibe a ÚNICA janela de mensagem com o relatório completo!
+    JOptionPane.showMessageDialog(null, relatorio.toString());
 }
-/*
- Validações no registrarPonto():
-	O que ele faz:
-		Busca o funcionário pela matrícula
-		Se não encontrou (null = nada) ele mostra erro
-		Impede o registro de ponto de alguém que não existe
-
-if (saida.isBefore(entrada) || saida.equals(entrada)) {
-System.out.println("ERRO: Horário de saída deve ser posterior ao horário de entrada.");
-return false;
 }
-	O que ele faz:
-		isBefore(): Verifica se saída é antes da entrada
-		equals(): Verifica se são iguais
-I		Empede o registro de saída antes da entrada Impede
-
-Novo método: consultarSaldoMinutos()
-	O que ele faz:
-
-		Começa com saldo zero
-		Percorre TODOS os registros de ponto
-		Se o registro é dessa pessoa → soma os minutos
-		Retorna o total em minutos
-Exemplo:
-
-	Segunda: +555 minutos (9h15min trabalhadas)
-	Terça: +480 minutos (8h trabalhadas)
-	Quarta: -120 minutos (2h compensadas)
-	TOTAL: 915 minutos = 15h15min no banco
-
-Novo método: formatarSaldo()
-	O que ele faz:
-		Transforma minutos em formato bonito HH:mm
-			Passo a Passo:
-
-				Math.abs(): Remove o sinal negativo (trabalha com valor absoluto)
-				-135 minutos passa a ser 135 minutos
-				minutos / 60: Divide por 60 = horas inteiras
-				135 / 60 = 2 horas
-				minutos % 60: Resto da divisão = minutos restantes
-				135 % 60 = 15 minutos
-				String.format("%s%02d:%02d"): Formata com zeros à esquerda
-				%s = sinal (+ ou -)
-				%02d = número com 2 dígitos (01, 02, 10, etc)
-
-Novo Método: exibirRelatorio()
-	O que ele faz:
-		Deixa mais bonito
- */
