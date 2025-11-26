@@ -6,23 +6,8 @@ Este projeto é um sistema simples para gerenciamento de banco de horas de funci
 
 Descrição
 
-O sistema permite o cadastro de funcionários e o registro de horas trabalhadas e horas compensadas, armazenando os dados em vetores (arrays). A aplicação calcula automaticamente o saldo do banco de horas de cada colaborador, considerando tanto as horas trabalhadas quanto as horas compensadas (que são abatidas do saldo).A interface é baseada em um menu simples no console, facilitando a interação e o entendimento dos conceitos básicos de programação orientada a objetos, manipulação de arrays, entrada e saída de dados, e cálculos com datas e horas.
+A construção deste sistema permite que o aluno compreenda, na prática, como transformar requisitos reais em código funcional, aplicando princípios de Programação Orientada a Objetos, manipulação de dados, criação de estruturas de controle e uso de coleções. Além disso, o projeto visa estimular o raciocínio lógico ao trabalhar com cálculos de horas, tratamento de datas e horários por meio da API java.time, e validações essenciais para garantir o funcionamento correto do sistema. 
 
-Funcionalidades principais:
+Outro aspecto importante é o contato com a organização de um projeto estruturado em camadas models, view, controller favorecendo a compreensão de responsabilidades e boas práticas de código. O uso do JOptionPane como interface gráfica simples possibilita uma interação mais intuitiva com o usuário, sem exigir conhecimentos avançados de desenvolvimento de interfaces. 
 
-• Cadastro de funcionários (nome e matrícula).
-•  Registro de ponto diário com marcação de horas normais e horas compensadas.
-• Cálculo do saldo acumulado de horas para cada funcionário.
-• Consulta rápida do saldo de banco de horas.
-• Armazenamento dos dados temporariamente em arrays durante a execução.
-
-Tecnologias utilizadas
-
-• Linguagem Java
-• Estruturas de dados básicas com arrays
-• Programação orientada a objetos
-• Interface simples em console
-
-Objetivo
-
-Este projeto busca fortalecer o aprendizado dos conceitos iniciais de Java e desenvolver habilidades práticas em programação, lógica e organização de código, preparando os alunos para projetos mais complexos.
+Assim, este projeto não apenas introduz os alunos ao desenvolvimento de aplicações reais em Java, como também amplia sua capacidade de analisar problemas, propor soluções e estruturar sistemas funcionalmente corretos, preparando-os para desafios mais complexos nos próximos semestres. 
